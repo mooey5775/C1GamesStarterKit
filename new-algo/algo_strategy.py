@@ -47,12 +47,18 @@ class AlgoStrategy(gamelib.AlgoCore):
         #self.mazeR = [[20, 7], [10, 4], [15, 1]]
         #self.maze_switch = False
         #self.maze_on_L = True
-        self.pink_destructors_points = [[2, 12], [3, 12], [4, 12], [23, 12], [24, 12], [25, 12]]
-        self.pink_filters_points = [[0, 13], [1, 13], [3, 13], [5, 13], [22, 13], [24, 13], [26, 13], [27, 13]]
-        self.blue_destructors_points = [[6, 12], [7, 12], [8, 12], [9, 12], [10, 12], [16, 12], [17, 12], [18, 12], [19, 12], [20, 12], [21, 12], [10, 11], [11, 11], [15, 11], [16, 11]]
-        self.blue_filters_points = [[7, 13], [9, 13], [11, 13], [15, 13], [16, 13], [18, 13], [20, 13], [11, 12], [12, 12], [14, 12], [15, 12]]
-        self.teal_destructors_points = [[1, 12], [5, 12], [22, 12], [26, 12], [2, 11], [3, 11], [8, 11], [9, 11], [17, 11], [18, 11], [24, 11], [25, 11], [9, 10], [10, 10], [11, 10], [15, 10], [16, 10], [17, 10], [9, 9], [10, 9], [11, 9], [15, 9], [16, 9], [17, 9]]
-        self.teal_filters_points = [[2, 13], [4, 13], [6, 13], [8, 13], [10, 13], [17, 13], [19, 13], [21, 13], [23, 13], [25, 13], [12, 11], [14, 11], [12, 10], [14, 10]]
+        pink_destructors_points = [[2, 12], [3, 12], [5, 12], [6, 12], [21, 12], [22, 12], [24, 12], [25, 12]]
+        pink_filters_points = [[0, 13], [1, 13], [4, 13], [7, 13], [20, 13], [23, 13], [26, 13], [27, 13]]
+        blue_destructors_points = [[8, 12], [9, 12], [10, 12], [16, 12], [17, 12], [18, 12], [19, 12], [23, 12], [10, 11], [11, 11], [15, 11], [16, 11], [11, 10], [15, 10]]
+        blue_filters_points = [[10, 13], [16, 13], [18, 13], [11, 12], [15, 12]]
+        teal_destructors_points = [[1, 12], [26, 12], [2, 11], [9, 11], [17, 11], [25, 11], [10, 10], [16, 10], [10, 9], [11, 9], [15, 9], [16, 9]]
+        teal_filters_points = [[2, 13], [9, 13], [17, 13], [12, 11], [14, 11], [12, 10], [14, 10]]
+        self.pink_destructors_points = pink_destructors_points
+        self.pink_filters_points = pink_filters_points
+        self.blue_destructors_points = blue_destructors_points
+        self.blue_filters_points = blue_filters_points
+        self.teal_destructors_points = teal_destructors_points
+        self.teal_filters_points = teal_filters_points
         self.yellow_encryptors_points = list(reversed([[15, 8], [16, 8], [17, 8], [18, 8], [7, 7], [10, 7], [11, 7], [12, 7], [13, 7], [14, 7], [15, 7], [16, 7], [17, 7], [18, 7], [19, 7], [7, 6], [19, 6], [20, 6], [8, 5], [9, 5], [10, 5], [11, 5], [12, 5], [13, 5], [14, 5], [15, 5], [16, 5], [17, 5], [19, 5], [9, 4], [10, 4], [11, 4], [12, 4], [13, 4], [14, 4], [15, 4], [16, 4], [10, 3], [11, 3], [11, 2], [13, 2], [14, 2], [15, 2], [16, 2], [14, 1], [15, 1]]))
 
         self.maze_init = [i for i in self.yellow_encryptors_points if i[1] < 6] 
