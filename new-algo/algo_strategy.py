@@ -41,18 +41,18 @@ class AlgoStrategy(gamelib.AlgoCore):
         SCRAMBLER = config["unitInformation"][5]["shorthand"]
         # This is a good place to do initial setup
         self.scored_on_locations = []
-        self.front_def = [[1, 12], [26, 12], [2, 11], [3, 11], [24, 11], [25, 11], [4, 10], [23, 10]]
+        self.front_def = [[2, 12], [3, 12], [24, 12], [25, 12], [4, 11], [5, 11], [22, 11], [23, 11]] 
 
-        self.front_filters = [[0, 13], [1, 13], [26, 13], [27, 13], [3, 12], [24, 12], [5, 11], [22, 11]]
+        self.front_filters = [[0, 13], [1, 13], [3, 13], [24, 13], [26, 13], [27, 13], [5, 12], [22, 12]]
         self.maze_encryptors = [[8, 8], [9, 8], [10, 8], [11, 8], [12, 8], [13, 8], [14, 8], [15, 8], [16, 8], [17, 8], [18, 8], [19, 8], [7, 6], [9, 6], [10, 6], [11, 6], [12, 6], [13, 6], [14, 6], [15, 6], [16, 6], [17, 6], [18, 6], [20, 6], [10, 5], [11, 5], [12, 5], [13, 5], [14, 5], [15, 5], [16, 5], [17, 5], [10, 3], [12, 3], [13, 3], [14, 3], [15, 3], [17, 3], [13, 2], [14, 2]].reverse()
-        self.maze_init
         self.mazeL = [[7, 7], [17, 4], [12, 1]]
         self.mazeR = [[20, 7], [10, 4], [15, 1]]
         self.maze_switch = False
         self.maze_on_L = True
-        self.orange_destructors_points = [[5, 10], [6, 10], [7, 10], [8, 10], [9, 10], [18, 10], [19, 10], [20, 10], [21, 10], [22, 10]]
-        # extended front line?
-        self.orange_filters_points = [[7, 11], [9, 11], [18, 11], [20, 11]]
+        self.blue_destructors_points = [[6, 11], [7, 11], [8, 11], [9, 11], [18, 11], [19, 11], [20, 11], [21, 11], [8, 10], [9, 10], [10, 10], [17, 10], [18, 10], [19, 10], [10, 9], [17, 9]]
+        self.blue_filters_points = [[7, 12], [9, 12], [18, 12], [20, 12], [10, 11], [17, 11], [11, 10], [16, 10]]
+        self.teal_destructors_points = [[1, 12], [26, 12], [2, 11], [3, 11], [24, 11], [25, 11], [7, 10], [20, 10], [8, 9], [9, 9], [18, 9], [19, 9]]
+        self.teal_filters_points = [[8, 12], [19, 12], [12, 10], [15, 10]]
 
     def on_turn(self, turn_state):
         """
@@ -125,9 +125,12 @@ class AlgoStrategy(gamelib.AlgoCore):
                     game_state.attempt_spawn(ENCRYPTOR, self.mazeL)
 
     def boost_def(self, game_state):
-        game_state.attempt_spawn(DESTRUCTOR, self.orange_destructors_points[:2:] + self.orange_destructors_points[-2::])
-        game_state.attempt_spawn(FILTER, self.orange_filters_points)
-        game_state.attempt_spawn(DESTRUCTOR, self.orange_destructors_points)
+        game_state.attempt_spawn(DESTRUCTOR, self.blue_destructors_points[:2:] + self.blue_destructors_points[-2::])
+        game_state.attempt_spawn(FILTER, self.blue_filters_points)
+        game_state.attempt_spawn(DESTRUCTOR, self.blue_destructors_points)
+
+        game_state.attempt_spawn(FILTER, self.teal_filters_points)
+        game_state.attempt_spawn(DESTRUCTOR, self.teal_destructors_points)
     def scrambler_def(self, game_state):
         """
         Send out Scramblers at random locations to defend our base from enemy moving units.
