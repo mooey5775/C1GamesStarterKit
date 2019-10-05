@@ -159,8 +159,8 @@ class AlgoStrategy(gamelib.AlgoCore):
         Send out Scramblers at random locations to defend our base from enemy moving units.
         """
         # Possible deploy locations
-        left_scrambler_pts = [4, 9]
-        right_scrambler_pts = [23, 9]
+        left_scrambler_pts = game_state.game_map.get_edge_locations(game_state.game_map.BOTTOM_LEFT)
+        right_scrambler_pts = game_state.game_map.get_edge_locations(game_state.game_map.BOTTOM_RIGHT)
 
         opponent_bits = game_state.get_resource(game_state.BITS, player_index=1)
         self_bits = game_state.get_resource(game_state.BITS, player_index=0)
@@ -171,9 +171,19 @@ class AlgoStrategy(gamelib.AlgoCore):
         num_spawn = 4 if (opponent_bits > 10 and self_bits > 7) else 2
 
         if (self.left_damaged_more):
-            game_state.attempt_spawn(SCRAMBLER, left_scrambler_pts, num_spawn)
+            pts = self.filter_blocked_locations(left_scrambler_pts, game_state)
+            for i in range(num_spawn):
+                if len(pts) > 0:
+                    deploy_index = random.randint(0, len(pts) - 1)
+                    deploy_location = pts[deploy_index]
+                    game_state.attempt_spawn(SCRAMBLER, deploy_location)
         else:
-            game_state.attempt_spawn(SCRAMBLER, right_scrambler_pts, num_spawn)
+            pts = self.filter_blocked_locations(right_scrambler_pts, game_state)
+            for i in range(num_spawn):
+                if len(pts) > 0:
+                    deploy_index = random.randint(0, len(pts) - 1)
+                    deploy_location = pts[deploy_index]
+                    game_state.attempt_spawn(SCRAMBLER, deploy_location)
         return
 
     def ping_atk(self, game_state):
