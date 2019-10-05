@@ -104,7 +104,7 @@ class AlgoStrategy(gamelib.AlgoCore):
         return sum([game_state.contains_stationary_unit(location) for location in self.maze_encryptors])
 
     def build_maze(self, game_state):
-        game_state.attempt_spawn(ENCRYPTOR, self.front_filters)
+        game_state.attempt_spawn(ENCRYPTOR, self.maze_encryptors)
 
         if self.maze_switch: 
             if self.maze_on_L:
