@@ -61,7 +61,7 @@ class AlgoStrategy(gamelib.AlgoCore):
         self.teal_filters_points = teal_filters_points
         self.yellow_encryptors_points = list(reversed([[15, 8], [16, 8], [17, 8], [18, 8], [7, 7], [10, 7], [11, 7], [12, 7], [13, 7], [14, 7], [15, 7], [16, 7], [17, 7], [18, 7], [19, 7], [7, 6], [19, 6], [20, 6], [8, 5], [9, 5], [10, 5], [11, 5], [12, 5], [13, 5], [14, 5], [15, 5], [16, 5], [17, 5], [19, 5], [9, 4], [10, 4], [11, 4], [12, 4], [13, 4], [14, 4], [15, 4], [16, 4], [10, 3], [11, 3], [11, 2], [13, 2], [14, 2], [15, 2], [16, 2], [14, 1], [15, 1]]))
 
-        self.maze_init = [i for i in self.yellow_encryptors_points if i[1] < 6] 
+        self.maze_init = [i for i in self.yellow_encryptors_points if i[1] < 5] 
         self.yellow_filters_points = [[7, 8], [8, 8], [19, 8], [20, 8], [6, 7], [21, 7]]
         self.yellow_encryptors_points = list(reversed(self.yellow_encryptors_points))
         self.left_score_count = collections.deque(maxlen=3000)
@@ -146,8 +146,7 @@ class AlgoStrategy(gamelib.AlgoCore):
                     """
 
     def boost_def(self, game_state):
-        game_state.attempt_spawn(DESTRUCTOR, self.blue_destructors_points[:6])
-
+        game_state.attempt_spawn(DESTRUCTOR, self.blue_destructors_points[:8])
         game_state.attempt_spawn(ENCRYPTOR, self.maze_init)
 
         game_state.attempt_spawn(DESTRUCTOR, self.blue_destructors_points)
