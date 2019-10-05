@@ -42,17 +42,19 @@ class AlgoStrategy(gamelib.AlgoCore):
         SCRAMBLER = config["unitInformation"][5]["shorthand"]
         # This is a good place to do initial setup
         self.scored_on_locations = []
-        self.front_def = [[1, 12], [26, 12], [2, 11], [3, 11], [24, 11], [25, 11], [4, 10], [23, 10]]
-
-        self.front_filters = [[0, 13], [1, 13], [26, 13], [27, 13], [3, 12], [24, 12], [5, 11], [22, 11]]
-        self.maze_encryptors = [[8, 8], [9, 8], [10, 8], [11, 8], [12, 8], [13, 8], [14, 8], [15, 8], [16, 8], [17, 8], [18, 8], [19, 8], [7, 6], [9, 6], [10, 6], [11, 6], [12, 6], [13, 6], [14, 6], [15, 6], [16, 6], [17, 6], [18, 6], [20, 6], [10, 5], [11, 5], [12, 5], [13, 5], [14, 5], [15, 5], [16, 5], [17, 5], [10, 3], [12, 3], [13, 3], [14, 3], [15, 3], [17, 3], [13, 2], [14, 2]]
+        self.maze_encryptors = [[8, 8], [9, 8], [10, 8], [11, 8], [12, 8], [13, 8], [14, 8], [15, 8], [16, 8], [17, 8], [18, 8], [19, 8], [7, 6], [9, 6], [10, 6], [11, 6], [12, 6], [13, 6], [14, 6], [15, 6], [16, 6], [17, 6], [18, 6], [20, 6], [10, 5], [11, 5], [12, 5], [13, 5], [14, 5], [15, 5], [16, 5], [17, 5], [10, 3], [12, 3], [13, 3], [14, 3], [15, 3], [17, 3], [13, 2], [14, 2]].reverse()
         self.mazeL = [[7, 7], [17, 4], [12, 1]]
         self.mazeR = [[20, 7], [10, 4], [15, 1]]
         self.maze_switch = False
         self.maze_on_L = True
-        self.orange_destructors_points = [[5, 10], [6, 10], [7, 10], [8, 10], [9, 10], [18, 10], [19, 10], [20, 10], [21, 10], [22, 10]]
-        # extended front line?
-        self.orange_filters_points = [[7, 11], [9, 11], [18, 11], [20, 11]]
+        self.front_def = [[2, 12], [3, 12], [4, 12], [23, 12], [24, 12], [25, 12]]
+        self.front_filters = [[0, 13], [1, 13], [3, 13], [5, 13], [22, 13], [24, 13], [26, 13], [27, 13]]
+        self.blue_destructors_points = [[6, 12], [7, 12], [8, 12], [9, 12], [10, 12], [16, 12], [17, 12], [18, 12], [19, 12], [20, 12], [21, 12], [10, 11], [11, 11], [15, 11], [16, 11]]
+        self.blue_filters_points = [[7, 13], [9, 13], [11, 13], [15, 13], [16, 13], [18, 13], [20, 13], [11, 12], [12, 12], [14, 12], [15, 12]]
+        self.teal_destructors_points = [[1, 12], [5, 12], [22, 12], [26, 12], [2, 11], [3, 11], [8, 11], [9, 11], [17, 11], [18, 11], [24, 11], [25, 11], [9, 10], [10, 10], [11, 10], [15, 10], [16, 10], [17, 10], [9, 9], [10, 9], [11, 9], [15, 9], [16, 9], [17, 9]]
+        self.teal_filters_points = [[2, 13], [4, 13], [6, 13], [8, 13], [10, 13], [17, 13], [19, 13], [21, 13], [23, 13], [25, 13], [12, 11], [14, 11], [12, 10], [14, 10]]
+        self.yellow_encryptors_points = [[15, 8], [16, 8], [17, 8], [18, 8], [7, 7], [10, 7], [11, 7], [12, 7], [13, 7], [14, 7], [15, 7], [16, 7], [17, 7], [18, 7], [19, 7], [7, 6], [19, 6], [20, 6], [8, 5], [9, 5], [10, 5], [11, 5], [12, 5], [13, 5], [14, 5], [15, 5], [16, 5], [17, 5], [19, 5], [9, 4], [10, 4], [11, 4], [12, 4], [13, 4], [14, 4], [15, 4], [16, 4], [10, 3], [11, 3], [11, 2], [13, 2], [14, 2], [15, 2], [16, 2], [14, 1], [15, 1]]
+        self.yellow_filters_points = [[7, 8], [8, 8], [19, 8], [20, 8], [6, 7], [21, 7]]
         self.left_score_count = collections.deque(maxlen=3000)
         self.right_score_count = collections.deque(maxlen=3000)
         self.left_damaged_more = True
@@ -135,9 +137,12 @@ class AlgoStrategy(gamelib.AlgoCore):
                     game_state.attempt_spawn(ENCRYPTOR, self.mazeL)
 
     def boost_def(self, game_state):
-        game_state.attempt_spawn(DESTRUCTOR, self.orange_destructors_points[:2:] + self.orange_destructors_points[-2::])
-        game_state.attempt_spawn(FILTER, self.orange_filters_points)
-        game_state.attempt_spawn(DESTRUCTOR, self.orange_destructors_points)
+        game_state.attempt_spawn(DESTRUCTOR, self.blue_destructors_points[:2:] + self.blue_destructors_points[-2::])
+        game_state.attempt_spawn(FILTER, self.blue_filters_points)
+        game_state.attempt_spawn(DESTRUCTOR, self.blue_destructors_points)
+
+        game_state.attempt_spawn(FILTER, self.teal_filters_points)
+        game_state.attempt_spawn(DESTRUCTOR, self.teal_destructors_points)
     def scrambler_def(self, game_state):
         """
         Send out Scramblers at random locations to defend our base from enemy moving units.
