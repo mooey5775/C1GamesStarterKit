@@ -161,9 +161,6 @@ class AlgoStrategy(gamelib.AlgoCore):
         left_scrambler_pts = game_state.game_map.get_edge_locations(game_state.game_map.BOTTOM_LEFT)
         right_scrambler_pts = game_state.game_map.get_edge_locations(game_state.game_map.BOTTOM_RIGHT)
 
-        left_scrambler_pts = [4, 9]
-        right_scrambler_pts = [23, 9]
-
         opponent_bits = game_state.get_resource(game_state.BITS, player_index=1)
         self_bits = game_state.get_resource(game_state.BITS, player_index=0)
 
