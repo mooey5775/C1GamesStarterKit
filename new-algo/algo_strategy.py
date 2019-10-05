@@ -43,6 +43,7 @@ class AlgoStrategy(gamelib.AlgoCore):
         self.scored_on_locations = []
         self.front_def = [[2, 12], [3, 12], [24, 12], [25, 12], [4, 11], [5, 11], [22, 11], [23, 11]] 
 
+
         self.front_filters = [[0, 13], [1, 13], [3, 13], [24, 13], [26, 13], [27, 13], [5, 12], [22, 12]]
         self.maze_encryptors = [[8, 8], [9, 8], [10, 8], [11, 8], [12, 8], [13, 8], [14, 8], [15, 8], [16, 8], [17, 8], [18, 8], [19, 8], [7, 6], [9, 6], [10, 6], [11, 6], [12, 6], [13, 6], [14, 6], [15, 6], [16, 6], [17, 6], [18, 6], [20, 6], [10, 5], [11, 5], [12, 5], [13, 5], [14, 5], [15, 5], [16, 5], [17, 5], [10, 3], [12, 3], [13, 3], [14, 3], [15, 3], [17, 3], [13, 2], [14, 2]].reverse()
         self.mazeL = [[7, 7], [17, 4], [12, 1]]
@@ -89,7 +90,8 @@ class AlgoStrategy(gamelib.AlgoCore):
         self.build_maze(game_state)
         self.boost_def(game_state)
         self.scrambler_def(game_state)
-        self.ping_atk(game_state)
+        if game_state.turn_number % 2 == 1:
+            self.ping_atk(game_state)
 
     def build_frontline(self, game_state):
         """
@@ -99,6 +101,9 @@ class AlgoStrategy(gamelib.AlgoCore):
         # attempt_spawn will try to spawn units if we have resources, and will check if a blocking unit is already there
         game_state.attempt_spawn(FILTER, self.front_filters)
         game_state.attempt_spawn(DESTRUCTOR, self.front_def)
+        
+    def encryptors_in_maze(self, game_state):
+        return sum([game_state.contains_stationary_unit(location) for location in self.maze_encryptors])
 
     def build_maze(self, game_state):
         game_state.attempt_spawn(ENCRYPTOR, self.maze_encryptors)
@@ -135,27 +140,42 @@ class AlgoStrategy(gamelib.AlgoCore):
         """
         Send out Scramblers at random locations to defend our base from enemy moving units.
         """
-        # We can spawn moving units on our edges so a list of all our edge locations
-        friendly_edges = game_state.game_map.get_edge_locations(game_state.game_map.BOTTOM_LEFT) + game_state.game_map.get_edge_locations(game_state.game_map.BOTTOM_RIGHT)
+        # Possible deploy locations
+        left_scrambler_pts = [[4, 9], [6, 7]]
+        right_scrambler_pts = [[23, 9], [21, 7]]
+
+        opponent_bits = game_state.get_resource(game_state.BITS, player_index=1)
+        self_bits = game_state.get_resource(game_state.BITS, player_index=0)
 
         # Remove locations that are blocked by our own firewalls
         # since we can't deploy units there.
-        deploy_locations = self.filter_blocked_locations(friendly_edges, game_state)
+
+        deploy_locations = []
+
+        if (self.maze_on_L or (opponent_bits > 10 and self_bits > 7)):
+            deploy_locations.extend(self.filter_blocked_locations(left_scrambler_pts, game_state))
+        if (not self.maze_on_L or (opponent_bits > 10 and self_bits > 7)):
+            deploy_locations.extend(self.filter_blocked_locations(right_scrambler_pts, game_state))
 
         # While we have remaining bits to spend lets send out scramblers randomly.
-        while game_state.get_resource(game_state.BITS) >= game_state.type_cost(SCRAMBLER) and len(deploy_locations) > 0:
-            # Choose a random deploy location.
-            deploy_index = random.randint(0, len(deploy_locations) - 1)
-            deploy_location = deploy_locations[deploy_index]
-
-            game_state.attempt_spawn(SCRAMBLER, deploy_location)
-            """
-            We don't have to remove the location since multiple information
-            units can occupy the same space.
-            """
+        for location in deploy_locations:
+            game_state.attempt_spawn(SCRAMBLER, location)
         return
 
     def ping_atk(self, game_state):
+        # Possible spawn locations
+        left_loc = [13, 0]
+        right_loc = [14, 0]
+
+        spawn_loc = left_loc if self.maze_on_L else right_loc
+
+        _, damage = self.least_damage_spawn_location(game_state, [spawn_loc])
+        self_bits = game_state.get_resource(game_state.BITS, player_index=0)
+
+        num_emps = round(self_bits / 21)
+
+        game_state.attempt_spawn(EMP, spawn_loc, num_emps)
+        game_state.attempt_spawn(PING, spawn_loc, 1000)
         return
 
     def least_damage_spawn_location(self, game_state, location_options):
@@ -175,7 +195,7 @@ class AlgoStrategy(gamelib.AlgoCore):
             damages.append(damage)
 
         # Now just return the location that takes the least damage
-        return location_options[damages.index(min(damages))]
+        return (location_options[damages.index(min(damages))], min(damages))
 
     def detect_enemy_unit(self, game_state, unit_type=None, valid_x = None, valid_y = None):
         total_units = 0
