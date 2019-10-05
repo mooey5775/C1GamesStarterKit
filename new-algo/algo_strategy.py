@@ -51,8 +51,8 @@ class AlgoStrategy(gamelib.AlgoCore):
         pink_filters_points = [[0, 13], [1, 13], [4, 13], [7, 13], [20, 13], [23, 13], [26, 13], [27, 13]]
         blue_destructors_points = [[8, 12], [9, 12], [10, 12], [16, 12], [17, 12], [18, 12], [19, 12], [23, 12], [10, 11], [11, 11], [15, 11], [16, 11], [11, 10], [15, 10]]
         blue_filters_points = [[10, 13], [16, 13], [18, 13], [11, 12], [15, 12]]
-        teal_destructors_points = [[1, 12], [26, 12], [2, 11], [9, 11], [17, 11], [25, 11], [10, 10], [16, 10], [10, 9], [11, 9], [15, 9], [16, 9]]
-        teal_filters_points = [[2, 13], [9, 13], [17, 13], [12, 11], [14, 11], [12, 10], [14, 10]]
+        teal_destructors_points = [[1, 12], [26, 12], [2, 11], [9, 11], [17, 11], [25, 11], [10, 10], [16, 10], [10, 9], [11, 9], [15, 9], [16, 9], [4,12], [24,11]]
+        teal_filters_points = [[2, 13], [9, 13], [17, 13], [12, 11], [14, 11], [12, 10], [14, 10], [25, 13], [3,13]]
         self.pink_destructors_points = pink_destructors_points
         self.pink_filters_points = pink_filters_points
         self.blue_destructors_points = blue_destructors_points
