@@ -42,7 +42,7 @@ class AlgoStrategy(gamelib.AlgoCore):
         SCRAMBLER = config["unitInformation"][5]["shorthand"]
         # This is a good place to do initial setup
         self.scored_on_locations = []
-        self.maze_encryptors = [[8, 8], [9, 8], [10, 8], [11, 8], [12, 8], [13, 8], [14, 8], [15, 8], [16, 8], [17, 8], [18, 8], [19, 8], [7, 6], [9, 6], [10, 6], [11, 6], [12, 6], [13, 6], [14, 6], [15, 6], [16, 6], [17, 6], [18, 6], [20, 6], [10, 5], [11, 5], [12, 5], [13, 5], [14, 5], [15, 5], [16, 5], [17, 5], [10, 3], [12, 3], [13, 3], [14, 3], [15, 3], [17, 3], [13, 2], [14, 2]].reverse()
+        self.maze_encryptors = list(reversed([[8, 8], [9, 8], [10, 8], [11, 8], [12, 8], [13, 8], [14, 8], [15, 8], [16, 8], [17, 8], [18, 8], [19, 8], [7, 6], [9, 6], [10, 6], [11, 6], [12, 6], [13, 6], [14, 6], [15, 6], [16, 6], [17, 6], [18, 6], [20, 6], [10, 5], [11, 5], [12, 5], [13, 5], [14, 5], [15, 5], [16, 5], [17, 5], [10, 3], [12, 3], [13, 3], [14, 3], [15, 3], [17, 3], [13, 2], [14, 2]]))
         self.mazeL = [[7, 7], [17, 4], [12, 1]]
         self.mazeR = [[20, 7], [10, 4], [15, 1]]
         self.maze_switch = False
@@ -94,11 +94,8 @@ class AlgoStrategy(gamelib.AlgoCore):
         self.build_maze(game_state)
         self.boost_def(game_state)
         self.scrambler_def(game_state)
-        if game_state.turn_number % 2 == 1:
+        if game_state.turn_number % 3 == 1:
             self.ping_atk(game_state)
-
-    def optimal_atk_side(self, game_state):
-        game_map = game_state.game_map
 
     def build_frontline(self, game_state):
         """
@@ -167,12 +164,9 @@ class AlgoStrategy(gamelib.AlgoCore):
 
     def ping_atk(self, game_state):
         # Possible spawn locations
-        left_loc = [13, 0]
-        right_loc = [14, 0]
+        spawn_locs = [[13, 0], [14, 0]]
 
-        spawn_loc = left_loc if self.maze_on_L else right_loc
-
-        _, damage = self.least_damage_spawn_location(game_state, [spawn_loc])
+        spawn_loc, damage = self.least_damage_spawn_location(game_state, spawn_locs)
         self_bits = game_state.get_resource(game_state.BITS, player_index=0)
 
         num_emps = round(self_bits / 21)
@@ -226,7 +220,7 @@ class AlgoStrategy(gamelib.AlgoCore):
         # Let's record at what position we get scored on
         state = json.loads(turn_string)
         events = state["events"]
-        breaches = events["damage"]
+        breaches = events["breach"]
         damage_left = 0
         damage_right = 0
         for breach in breaches:
