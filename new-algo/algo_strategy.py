@@ -144,6 +144,7 @@ class AlgoStrategy(gamelib.AlgoCore):
 
     def boost_def(self, game_state):
         game_state.attempt_spawn(DESTRUCTOR, self.blue_destructors_points[:8])
+        game_state.attempt_spawn(FILTER, self.teal_filters_points[:2])
         game_state.attempt_spawn(ENCRYPTOR, self.maze_init)
 
         game_state.attempt_spawn(DESTRUCTOR, self.blue_destructors_points)
