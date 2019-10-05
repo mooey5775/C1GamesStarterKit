@@ -98,9 +98,6 @@ class AlgoStrategy(gamelib.AlgoCore):
     def optimal_atk_side(self, game_state):
         game_map = game_state.game_map
 
-    def optimal_def_side(self, game_state):
-
-
     def build_frontline(self, game_state):
         """
         Build basic defenses using hardcoded locations.
@@ -146,8 +143,8 @@ class AlgoStrategy(gamelib.AlgoCore):
         Send out Scramblers at random locations to defend our base from enemy moving units.
         """
         # Possible deploy locations
-        left_scrambler_pts = [[4, 9], [6, 7]]
-        right_scrambler_pts = [[23, 9], [21, 7]]
+        left_scrambler_pts = [4, 9]
+        right_scrambler_pts = [23, 9]
 
         opponent_bits = game_state.get_resource(game_state.BITS, player_index=1)
         self_bits = game_state.get_resource(game_state.BITS, player_index=0)
@@ -155,16 +152,12 @@ class AlgoStrategy(gamelib.AlgoCore):
         # Remove locations that are blocked by our own firewalls
         # since we can't deploy units there.
 
-        deploy_locations = []
+        num_spawn = 4 if (opponent_bits > 10 and self_bits > 7) else 2
 
-        if (self.maze_on_L or (opponent_bits > 10 and self_bits > 7)):
-            deploy_locations.extend(self.filter_blocked_locations(left_scrambler_pts, game_state))
-        if (not self.maze_on_L or (opponent_bits > 10 and self_bits > 7)):
-            deploy_locations.extend(self.filter_blocked_locations(right_scrambler_pts, game_state))
-
-        # While we have remaining bits to spend lets send out scramblers randomly.
-        for location in deploy_locations:
-            game_state.attempt_spawn(SCRAMBLER, location)
+        if (self.left_damaged_more):
+            game_state.attempt_spawn(SCRAMBLER, left_scrambler_pts, num_spawn)
+        else:
+            game_state.attempt_spawn(SCRAMBLER, right_scrambler_pts, num_spawn)
         return
 
     def ping_atk(self, game_state):
@@ -246,6 +239,9 @@ class AlgoStrategy(gamelib.AlgoCore):
         self.right_score_count.append(damage_right)
         
         self.left_damaged_more = sum(self.left_score_count) >= sum(self.right_score_count)
+        # gamelib.debug_write(self.left_score_count)
+        # gamelib.debug_write(self.right_score_count)
+        # gamelib.debug_write(self.left_damaged_more)
 
 
 if __name__ == "__main__":

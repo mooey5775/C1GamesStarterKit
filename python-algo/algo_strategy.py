@@ -4,7 +4,6 @@ import math
 import warnings
 from sys import maxsize
 import json
-import collections
 
 
 """
@@ -41,9 +40,10 @@ class AlgoStrategy(gamelib.AlgoCore):
         EMP = config["unitInformation"][4]["shorthand"]
         SCRAMBLER = config["unitInformation"][5]["shorthand"]
         # This is a good place to do initial setup
-        self.left_score_count = collections.deque(maxlen=3000)
-        self.right_score_count = collections.deque(maxlen=3000)
-        self.left_damaged_more = True
+        self.scored_on_locations = []
+
+    
+        
 
     def on_turn(self, turn_state):
         """
@@ -221,24 +221,17 @@ class AlgoStrategy(gamelib.AlgoCore):
         # Let's record at what position we get scored on
         state = json.loads(turn_string)
         events = state["events"]
-        breaches = events["damage"]
-        damage_left = 0
-        damage_right = 0
+        breaches = events["breach"]
         for breach in breaches:
             location = breach[0]
             unit_owner_self = True if breach[4] == 1 else False
             # When parsing the frame data directly, 
             # 1 is integer for yourself, 2 is opponent (StarterKit code uses 0, 1 as player_index instead)
             if not unit_owner_self:
-                if location[0] > 13:
-                    damage_right += 1
-                else:
-                    damage_left += 1
+                gamelib.debug_write("Got scored on at: {}".format(location))
+                self.scored_on_locations.append(location)
+                gamelib.debug_write("All locations: {}".format(self.scored_on_locations))
 
-        self.left_score_count.append(damage_left)
-        self.right_score_count.append(damage_right)
-        
-        self.left_damaged_more = sum(self.left_score_count) >= sum(self.right_score_count)
 
 if __name__ == "__main__":
     algo = AlgoStrategy()
