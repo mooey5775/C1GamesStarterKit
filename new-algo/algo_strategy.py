@@ -112,29 +112,26 @@ class AlgoStrategy(gamelib.AlgoCore):
     def build_maze(self, game_state):
         return
         #game_state.attempt_spawn(ENCRYPTOR, self.yellow_filters_points)
-
-"""
-        if self.maze_switch: 
-            if self.maze_on_L:
-                game_state.attempt_spawn(ENCRYPTOR, self.mazeL)
-            else:
-                game_state.attempt_spawn(ENCRYPTOR, self.mazeR)
-            self.maze_on_L = not self.maze_on_L 
-            self.maze_switch = False
-        else: 
-            # Randomly decide whether or not to change maze configuration 
-            self.maze_switch = bool(random.getrandbits(1))
-            if self.maze_switch: 
-                if self.maze_on_L:
-                    game_state.attempt_remove(self.mazeR)
-                else:
-                    game_state.attempt_remove(self.mazeL)
-            else:
-                if self.maze_on_L:
-                    game_state.attempt_spawn(ENCRYPTOR, self.mazeR)
-                else:
-                    game_state.attempt_spawn(ENCRYPTOR, self.mazeL)
-                    """
+        # if self.maze_switch: 
+        #     if self.maze_on_L:
+        #         game_state.attempt_spawn(ENCRYPTOR, self.mazeL)
+        #     else:
+        #         game_state.attempt_spawn(ENCRYPTOR, self.mazeR)
+        #     self.maze_on_L = not self.maze_on_L 
+        #     self.maze_switch = False
+        # else: 
+        #     # Randomly decide whether or not to change maze configuration 
+        #     self.maze_switch = bool(random.getrandbits(1))
+        #     if self.maze_switch: 
+        #         if self.maze_on_L:
+        #             game_state.attempt_remove(self.mazeR)
+        #         else:
+        #             game_state.attempt_remove(self.mazeL)
+        #     else:
+        #         if self.maze_on_L:
+        #             game_state.attempt_spawn(ENCRYPTOR, self.mazeR)
+        #         else:
+        #             game_state.attempt_spawn(ENCRYPTOR, self.mazeL)
 
     def boost_def(self, game_state):
         game_state.attempt_spawn(DESTRUCTOR, self.blue_destructors_points)
