@@ -47,8 +47,8 @@ class AlgoStrategy(gamelib.AlgoCore):
         #self.mazeR = [[20, 7], [10, 4], [15, 1]]
         #self.maze_switch = False
         #self.maze_on_L = True
-        self.front_def = [[2, 12], [3, 12], [4, 12], [23, 12], [24, 12], [25, 12]]
-        self.front_filters = [[0, 13], [1, 13], [3, 13], [5, 13], [22, 13], [24, 13], [26, 13], [27, 13]]
+        self.pink_destructors_points = [[2, 12], [3, 12], [4, 12], [23, 12], [24, 12], [25, 12]]
+        self.pink_filters_points = [[0, 13], [1, 13], [3, 13], [5, 13], [22, 13], [24, 13], [26, 13], [27, 13]]
         self.blue_destructors_points = [[6, 12], [7, 12], [8, 12], [9, 12], [10, 12], [16, 12], [17, 12], [18, 12], [19, 12], [20, 12], [21, 12], [10, 11], [11, 11], [15, 11], [16, 11]]
         self.blue_filters_points = [[7, 13], [9, 13], [11, 13], [15, 13], [16, 13], [18, 13], [20, 13], [11, 12], [12, 12], [14, 12], [15, 12]]
         self.teal_destructors_points = [[1, 12], [5, 12], [22, 12], [26, 12], [2, 11], [3, 11], [8, 11], [9, 11], [17, 11], [18, 11], [24, 11], [25, 11], [9, 10], [10, 10], [11, 10], [15, 10], [16, 10], [17, 10], [9, 9], [10, 9], [11, 9], [15, 9], [16, 9], [17, 9]]
@@ -104,8 +104,8 @@ class AlgoStrategy(gamelib.AlgoCore):
         Remember to defend corners and avoid placing units in the front where enemy EMPs can attack them.
         """
         # attempt_spawn will try to spawn units if we have resources, and will check if a blocking unit is already there
-        game_state.attempt_spawn(FILTER, self.front_filters)
-        game_state.attempt_spawn(DESTRUCTOR, self.front_def)
+        game_state.attempt_spawn(FILTER, self.pink_filters_points)
+        game_state.attempt_spawn(DESTRUCTOR, self.pink_destructors_points)
         
     def encryptors_in_maze(self, game_state):
         return sum([game_state.contains_stationary_unit(location) for location in self.maze_encryptors])
